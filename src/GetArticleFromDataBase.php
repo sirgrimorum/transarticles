@@ -62,8 +62,8 @@ class GetArticleFromDataBase {
      * @param $scope The scope to load
      * 
      */
-    public static function getarticlejs($scope,$basevar='') {
-        if($basevar==''){
+    public static function getjs($scope, $basevar = '') {
+        if ($basevar == '') {
             $basevar = config('sirgrimorum.transarticles.default_base_var');
         }
         $lang = App::getLocale();
@@ -72,6 +72,7 @@ class GetArticleFromDataBase {
             $modelClass = config('sirgrimorum.transarticles.default_articles_model');
             $langColumn = config('sirgrimorum.transarticles.default_lang_column');
             $findArticles = config('sirgrimorum.transarticles.default_findarticles_function_name');
+            $findArticle = config('sirgrimorum.transarticles.default_findarticle_function_name');
             $articles = $modelClass::{$findArticles}($scope)->where($langColumn, "=", $lang)->get();
             if (count($articles)) {
                 $listo = true;
@@ -79,13 +80,27 @@ class GetArticleFromDataBase {
                 $articles = $modelClass::{$findArticles}($scope)->get();
                 if (count($articles)) {
                     $listo = true;
-                    //return $article->content . "<span class='label label-warning'>" . $article->lang . "</span>";
                 } else {
-                    $jsarray = $langfile;
+                    $articles = $modelClass::{$findArticle}($scope)->where($langColumn, "=", $lang)->first();
+                    $listo = false;
+                    if ($articles) {
+                        $jsarray = [];
+                        data_fill($jsarray, $scope, $articles->content);
+                    } else {
+                        $articles = $modelClass::{$findArticle}($scope)->first();
+                        if ($articles) {
+                            $jsarray = [];
+                            data_fill($jsarray, $scope, $articles->content);
+                            //$jsarray = $articles->content;
+                        } else {
+                            $jsarray = [];
+                            data_fill($jsarray, $scope, $scope);
+                        }
+                    }
                 }
             }
         } catch (Exception $ex) {
-            return $scope . " - Error:" . print_r($ex, true);
+            return $scope . " - Error:" . print_r($ex->getMessage(), true);
         }
         if ($listo) {
             if (count($articles)) {
@@ -94,12 +109,14 @@ class GetArticleFromDataBase {
                     $trans[$article->nickname] = $article->content;
                 }
                 $jsarray = json_encode($trans);
+                return "<script>window.{$basevar} = window.{$basevar} || {};{$basevar}.{$scope} = {$jsarray};</script>";
             } else {
-                $jsarray = $langfile;
+                $jsarray = [];
+                data_fill($jsarray, $scope, $scope);
             }
-        }
-
-        return "<script>window.{$basevar} = window.{$basevar} || {};{$basevar}.{$scope} = {$jsarray};</script>";
+        } 
+        $jsarray = json_encode($jsarray);
+        return "<script>window.{$basevar} = window.{$basevar} || {};{$basevar} = {$jsarray};</script>";
     }
 
 }

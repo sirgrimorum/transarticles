@@ -31,7 +31,7 @@ class Article extends Model {
     }
 
     public function getNameAttribute() {
-        return $this->nickname . " - " . $this->scope . " (" . $this->lang . ")";
+        return $this->scope . "." . $this->nickname . " (" . $this->lang . ")";
     }
     
     public function user(){

@@ -20,9 +20,13 @@ class TransArticlesServiceProvider extends ServiceProvider {
                 ], 'config');
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
 
+        Blade::directive('transarticles', function($nickname) {
+            $translations = new \Sirgrimorum\TransArticles\GetArticleFromDataBase($this->app);
+            return $translations->get(str_replace(['(', ')', ' ', '"', "'"], '', $nickname));
+        });
         Blade::directive('transarticles_tojs', function($scope, $basevar = '') {
-            $translations = new \SirGrimorum\TransArticles\GetArticleFromDataBase($this->app);
-            return $translations->getarticle(str_replace(['(', ')', ' ', '"', "'"], '', $scope), $basevar);
+            $translations = new \Sirgrimorum\TransArticles\GetArticleFromDataBase($this->app);
+            return $translations->getjs(str_replace(['(', ')', ' ', '"', "'"], '', $scope), $basevar);
         });
     }
 

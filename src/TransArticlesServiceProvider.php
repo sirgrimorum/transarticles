@@ -24,9 +24,17 @@ class TransArticlesServiceProvider extends ServiceProvider {
             $translations = new \Sirgrimorum\TransArticles\GetArticleFromDataBase($this->app);
             return $translations->get(str_replace(['(', ')', ' ', '"', "'"], '', $nickname));
         });
-        Blade::directive('transarticles_tojs', function($scope, $basevar = '') {
+        Blade::directive('transarticles_tojs', function($expression) {
+            $auxExpression = explode(',', str_replace(['(', ')', ' ', '"', "'"], '', $expression));
+            if (count($auxExpression)>1){
+                $scope=$auxExpression[0];
+                $basevar=$auxExpression[1];
+            } else {
+                $scope=$auxExpression[0];
+                $basevar = "";
+            }
             $translations = new \Sirgrimorum\TransArticles\GetArticleFromDataBase($this->app);
-            return $translations->getjs(str_replace(['(', ')', ' ', '"', "'"], '', $scope), $basevar);
+            return $translations->getjs($scope, $basevar);
         });
     }
 

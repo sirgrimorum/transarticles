@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model {
 
-    public $rules = [ //The validation rules
+    public $rules = [//The validation rules
         'nickname' => 'bail|required|max:255',
         'scope' => 'bail|required|max:255',
         'lang' => 'bail|required|max:255',
@@ -34,7 +34,7 @@ class Article extends Model {
         return $this->scope . "." . $this->nickname . " (" . $this->lang . ")";
     }
     
-    public function user(){
+    public function user() {
         return $this->belongsTo('App\User');
     }
 

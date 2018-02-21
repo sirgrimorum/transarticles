@@ -15,7 +15,7 @@ class Article extends Model {
     public $error_messages = []; //The validation error messages
 
     public function _construct() {
-        $error_messages = [
+        $this->error_messages = [
         ];
     }
 

@@ -32,7 +32,12 @@ class GetArticleFromDataBase {
             $this->lang = $lang;
         }
     }
-
+    
+    /**
+     * Return the translation for the article
+     * @param String $nickname The article to load using dot notation
+     * @return String The content of the article localized, if not found, return the first article in a diferent language, if neither, returns de $nickname
+     */
     public static function get($nickname) {
         try {
             $lang = App::getLocale();
@@ -59,7 +64,7 @@ class GetArticleFromDataBase {
      * return the JavaScript from article table
      * 
      *
-     * @param $scope The scope to load
+     * @param String $scope The scope to load
      * 
      */
     public static function getjs($scope, $basevar = '') {

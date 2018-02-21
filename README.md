@@ -15,7 +15,7 @@ Localization using a datablase table for Laravel 5.6. Include a function to add 
 Via Composer
 
 ``` bash
-$ composer require :sirgrimorum/TransArticles
+$ composer require :sirgrimorum/transarticles
 ```
 
 Create Table
@@ -106,17 +106,17 @@ If you discover any security related issues, please email andres.espinosa@grimor
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/:vendor/:package_name.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/sirgrimorum/transarticles.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/:vendor/:package_name/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/:vendor/:package_name.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/:package_name.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/sirgrimorum/TransArticles.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/sirgrimorum/transarticles/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/sirgrimorum/transarticles.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/sirgrimorum/transarticles.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/sirgrimorum/transarticles.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/sirgrimorum/TransArticles
-[link-travis]: https://travis-ci.org/:vendor/:package_name
-[link-scrutinizer]: https://scrutinizer-ci.com/g/:vendor/:package_name/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/:vendor/:package_name
-[link-downloads]: https://desarrollo.grimorum.com/andres/TransArticles
+[link-packagist]: https://packagist.org/packages/sirgrimorum/transarticles
+[link-travis]: https://travis-ci.org/sirgrimorum/transarticles
+[link-scrutinizer]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles
+[link-downloads]: https://desarrollo.grimorum.com/andres/transarticles
 [link-author]: https://github.com/sirgrimorum
 [link-contributors]: http://grimorum.com

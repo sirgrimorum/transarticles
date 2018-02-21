@@ -1,5 +1,5 @@
 {
-    "name": "sirgrimorum/TransArticles",
+    "name": "sirgrimorum/transarticles",
     "type": "library",
     "description": "Localization using db table as source for translated text",
     "keywords": [
@@ -7,7 +7,7 @@
         "TransArticles",
         "Localizarion"
     ],
-    "homepage": "http://desarrollo.grimorum.com/andres/TransArticles",
+    "homepage": "http://desarrollo.grimorum.com/andres/transarticles",
     "license": "MIT",
     "authors": [
         {

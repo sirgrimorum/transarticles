@@ -108,15 +108,15 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/sirgrimorum/transarticles.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/sirgrimorum/transarticles/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/scrutinizer/build/g/sirgrimorum/transarticles.svg?style=flat-square
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/sirgrimorum/transarticles.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/sirgrimorum/transarticles.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/sirgrimorum/transarticles.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/sirgrimorum/transarticles
-[link-travis]: https://travis-ci.org/sirgrimorum/transarticles
+[link-travis]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles/inspections
 [link-scrutinizer]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles
-[link-downloads]: https://desarrollo.grimorum.com/andres/transarticles
+[link-downloads]: https://github.com/sirgrimorum/transarticles
 [link-author]: https://github.com/sirgrimorum
 [link-contributors]: http://grimorum.com

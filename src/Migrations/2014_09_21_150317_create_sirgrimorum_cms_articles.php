@@ -14,6 +14,7 @@ class CreateSirgrimorumCmsArticles extends Migration {
     {
         Schema::create('articles', function($table)
         {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nickname',50);
             $table->string('scope',50);

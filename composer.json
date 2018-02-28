@@ -23,8 +23,11 @@
         "phpunit/phpunit" : ">=5.4.3"
     },
     "autoload": {
+        "classmap": [
+            "src"
+        ],
         "psr-4": {
-            "sirgrimorum\\TransArticles\\": "src"
+            "Sirgrimorum\\TransArticles\\": "src/"
         }
     },
     "autoload-dev": {
@@ -34,7 +37,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1.0-dev"
+            "dev-master": "1.2.0-dev"
         },
         "laravel": {
             "providers": [
@@ -44,8 +47,5 @@
                 "TransArticles": "Sirgrimorum\\TransArticles\\TransArticlesFacade"
             }
         }
-    },
-    "config": {
-        "sort-packages": true
     }
 }

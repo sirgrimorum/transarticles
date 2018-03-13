@@ -28,7 +28,8 @@
         ],
         "psr-4": {
             "Sirgrimorum\\TransArticles\\": "src/"
-        }
+        },
+        "files" : ["src/Helper.php"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -37,7 +38,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2.0-dev"
+            "dev-master": "1.2.1-dev"
         },
         "laravel": {
             "providers": [

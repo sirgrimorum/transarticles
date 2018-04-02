@@ -56,7 +56,7 @@ class GetArticleFromDataBase {
                 }
             }
         } catch (Exception $ex) {
-            return $nickname . "<pre class='label label-warning'>" . print_r([$ex->getMessage(), $ex->getTrace()], true) . "</pre>";
+            return $nickname . "<pre class='label label-warning'>" . print_r([$ex->getMessage(), $ex->getTraceAsString()], true) . "</pre>";
         }
     }
 

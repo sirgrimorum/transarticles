@@ -45,11 +45,11 @@ class GetArticleFromDataBase {
             $langColumn = config('sirgrimorum.transarticles.default_lang_column');
             $findArticle = config('sirgrimorum.transarticles.default_findarticle_function_name');
             $article = $modelClass::{$findArticle}($nickname)->where($langColumn, "=", $lang)->first();
-            if (count($article)) {
+            if ($article) {
                 return $article->content;
             } else {
                 $article = $modelClass::{$findArticle}($nickname)->first();
-                if (count($article)) {
+                if ($article) {
                     return $article->content . "<small><span class='label label-warning'>" . $article->{$langColumn} . "</span></small>";
                 } else {
                     return $nickname;
@@ -79,11 +79,11 @@ class GetArticleFromDataBase {
             $findArticles = config('sirgrimorum.transarticles.default_findarticles_function_name');
             $findArticle = config('sirgrimorum.transarticles.default_findarticle_function_name');
             $articles = $modelClass::{$findArticles}($scope)->where($langColumn, "=", $lang)->get();
-            if (count($articles)) {
+            if ($articles) {
                 $listo = true;
             } else {
                 $articles = $modelClass::{$findArticles}($scope)->get();
-                if (count($articles)) {
+                if ($articles) {
                     $listo = true;
                 } else {
                     $articles = $modelClass::{$findArticle}($scope)->where($langColumn, "=", $lang)->first();
@@ -108,7 +108,7 @@ class GetArticleFromDataBase {
             return $scope . " - Error:" . print_r($ex->getMessage(), true);
         }
         if ($listo) {
-            if (count($articles)) {
+            if ($articles) {
                 $trans = [];
                 foreach ($articles as $article) {
                     $trans[$article->nickname] = $article->content;

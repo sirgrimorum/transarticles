@@ -15,13 +15,13 @@ class CreateSirgrimorumCmsArticles extends Migration {
         Schema::create('articles', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('nickname',50);
             $table->string('scope',50);
             $table->string('lang',10);
             $table->longtext('content');
             $table->boolean('activated')->default(0);
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->timestamps();
             $table->unique(array('nickname','lang','scope'));
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

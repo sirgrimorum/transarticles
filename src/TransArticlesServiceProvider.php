@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Foundation\AliasLoader;
 use Sirgrimorum\TransArticles\GetArticleFromDataBase;
+use Illuminate\Support\Facades\Artisan;
 
 class TransArticlesServiceProvider extends ServiceProvider {
 

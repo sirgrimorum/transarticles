@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=7.0",
-        "laravel/framework": ">=5.4"
+        "laravel/framework": ">=5.4",
+        "orangehill/iseed": ">2.2"
     },
     "require-dev": {
         "phpunit/phpunit" : ">=5.4.3"
@@ -38,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2.7-dev"
+            "dev-master": "1.2.8-dev"
         },
         "laravel": {
             "providers": [

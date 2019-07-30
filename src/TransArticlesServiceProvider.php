@@ -14,7 +14,8 @@ class TransArticlesServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot() {
+    public function boot()
+    {
         $this->publishes([
             __DIR__ . '/Config/transarticles.php' => config_path('sirgrimorum/transarticles.php'),
                 ], 'config');
@@ -26,16 +27,36 @@ class TransArticlesServiceProvider extends ServiceProvider {
         });
         Blade::directive('transarticles_tojs', function($expression) {
             $auxExpression = explode(',', str_replace(['(', ')', ' ', '"', "'"], '', $expression));
-            if (count($auxExpression)>1) {
+            if (count($auxExpression) > 1)
+            {
                 $scope = $auxExpression[0];
                 $basevar = $auxExpression[1];
-            } else {
+            }
+            else
+            {
                 $scope = $auxExpression[0];
                 $basevar = "";
             }
             $translations = new \Sirgrimorum\TransArticles\GetArticleFromDataBase($this->app);
             return $translations->getjs($scope, $basevar);
         });
+
+        Artisan::command('transarticles:createseed', function () {
+            $bar = $this->output->createProgressBar(2);
+            $confirm = $this->choice("Do you wisth to clean the DatabaseSeeder.php list?", ['yes', 'no'], 0);
+            $bar->advance();
+            $nombre = date("Y_m_d_His");
+            if ($confirm == 'yes') {
+                $this->line("Creating seed archive of articles table and celaning DatabaseSeeder");
+                Artisan::call("iseed articles --classnameprefix={$nombre} --chunksize=100 --clean");
+            } else {
+                $this->line("Creating seed archive of articles table and adding to DatabaseSeeder list");
+                Artisan::call("iseed articles --classnameprefix={$nombre} --chunksize=100");
+            }
+            $this->info("Seed file created with the name {$nombre}ArticlesSeeder.php");
+            $bar->advance();
+            $bar->finish();
+        })->describe('Create a seeder file with the current table Articles');
     }
 
     /**
@@ -43,12 +64,13 @@ class TransArticlesServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         //AliasLoader::getInstance()->alias('TransArticles', GetArticleFromDataBase::class);
         $loader = AliasLoader::getInstance();
-            $loader->alias(
-                    'TransArticles', GetArticleFromDataBase::class
-            );
+        $loader->alias(
+                'TransArticles', GetArticleFromDataBase::class
+        );
         $this->app->singleton(GetArticleFromDataBase::class, function($app) {
             return new GetArticleFromDataBase($app);
         });

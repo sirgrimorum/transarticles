@@ -46,15 +46,15 @@ class TransArticlesServiceProvider extends ServiceProvider {
             $bar = $this->output->createProgressBar(2);
             $confirm = $this->choice("Do you wisth to clean the DatabaseSeeder.php list?", ['yes', 'no'], 0);
             $bar->advance();
-            $nombre = date("Y_m_d_His");
+            $nombre = date("YmdHis");
             if ($confirm == 'yes') {
                 $this->line("Creating seed archive of articles table and celaning DatabaseSeeder");
-                Artisan::call("iseed articles --classnameprefix={$nombre} --chunksize=100 --clean");
+                Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100 --clean");
             } else {
                 $this->line("Creating seed archive of articles table and adding to DatabaseSeeder list");
-                Artisan::call("iseed articles --classnameprefix={$nombre} --chunksize=100");
+                Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100");
             }
-            $this->info("Seed file created with the name {$nombre}ArticlesSeeder.php");
+            $this->info("Seed file created with the name Articles{$nombre}Seeder.php");
             $bar->advance();
             $bar->finish();
         })->describe('Create a seeder file with the current table Articles');

@@ -42,21 +42,43 @@ class TransArticlesServiceProvider extends ServiceProvider {
             return $translations->getjs($scope, $basevar);
         });
 
-        Artisan::command('transarticles:createseed', function () {
-            $bar = $this->output->createProgressBar(2);
-            $confirm = $this->choice("Do you wisth to clean the DatabaseSeeder.php list?", ['yes', 'no'], 0);
-            $bar->advance();
-            $nombre = date("YmdHis");
-            if ($confirm == 'yes') {
-                $this->line("Creating seed archive of articles table and celaning DatabaseSeeder");
-                Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100 --clean");
-            } else {
-                $this->line("Creating seed archive of articles table and adding to DatabaseSeeder list");
-                Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100");
+        Artisan::command('transarticles:createseed {--all : Create a seed for all database tables except migrations table} {--force : Force the iseed}', function () {
+            $options = $this->options('all');
+            if ($options['all']) {
+                $dbName = env('DB_DATABASE');
+
+                $query =  \DB::select("SHOW TABLES WHERE Tables_in_$dbName <> 'migrations'");
+                $collection = new \Illuminate\Support\Collection($query);
+                $tables = $collection->implode("Tables_in_$dbName",',');
+                $options = $this->options('force');
+                if ($options['force']) {
+                    $nombre = "";
+                }else{
+                    $nombre = date("YmdHis");
+                }
+                $this->info('Calling iseed for all tables except migrations with suffix "{$nombre}" ...');
+                $this->call('iseed', [
+                    'tables' => $tables,
+                    '--classnamesuffix' => $nombre,
+                    '--chunksize' => "100",
+                    '--force' => $options['force'],
+                ]);
+            }else{
+                $bar = $this->output->createProgressBar(2);
+                $confirm = $this->choice("Do you wisth to clean the DatabaseSeeder.php list?", ['yes', 'no'], 0);
+                $bar->advance();
+                $nombre = date("YmdHis");
+                if ($confirm == 'yes') {
+                    $this->line("Creating seed archive of articles table and celaning DatabaseSeeder");
+                    Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100 --clean");
+                } else {
+                    $this->line("Creating seed archive of articles table and adding to DatabaseSeeder list");
+                    Artisan::call("iseed articles --classnamesuffix={$nombre} --chunksize=100");
+                }
+                $this->info("Seed file created with the name Articles{$nombre}Seeder.php");
+                $bar->advance();
+                $bar->finish();
             }
-            $this->info("Seed file created with the name Articles{$nombre}Seeder.php");
-            $bar->advance();
-            $bar->finish();
         })->describe('Create a seeder file with the current table Articles');
     }
 

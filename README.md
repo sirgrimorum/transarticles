@@ -24,7 +24,7 @@ Create Table
 $ php artisan migrate
 ```
 
-Publish Configuration
+OPTIONAL: Publish configuration file
 
 ``` bash
 $php artisan vendor:publish --tag=config
@@ -36,6 +36,10 @@ Bring a translated article
 
 ``` php
 $text = TransArticles::get("scope.nickname");
+```
+OR
+``` php
+$text = trans_article("scope.nickname");
 ```
 
 ## Articles to JavaScript
@@ -92,6 +96,31 @@ Load javascript object with translated article using the Blade directive
     })();
 </script>
 ```
+
+When using blade directives, remember to clear de view:cache after each change in the articles table:
+
+``` bash
+$php artisan view:clear
+``` 
+
+## Seeding
+
+TransArticles installs orangehill/iseed to create seed files from the DataBase data. There are 2 new commands:
+
+To create seed files from the Articles table:
+``` bash
+$php artisan transarticles:createseed
+``` 
+
+To create seed files from ALL the tables in de DataBase except the migrations table:
+``` bash
+$php artisan transarticles:createseed --all
+``` 
+
+To create seed files from ALL the tables in de DataBase except the migrations table without suffix and forcing overwrite of prior seed files:
+``` bash
+$php artisan transarticles:createseed --all --force
+``` 
 
 ## Security
 

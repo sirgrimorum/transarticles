@@ -9,19 +9,17 @@
     ],
     "homepage": "http://desarrollo.grimorum.com/andres/transarticles",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Sirgrimorum",
-            "email": "andres.espinosa@grimorum.com"
-        }
-    ],
+    "authors": [{
+        "name": "Sirgrimorum",
+        "email": "andres.espinosa@grimorum.com"
+    }],
     "require": {
         "php": ">=7.0",
         "laravel/framework": ">=5.4",
         "orangehill/iseed": ">2.2"
     },
     "require-dev": {
-        "phpunit/phpunit" : ">=5.4.3"
+        "phpunit/phpunit": ">=5.4.3"
     },
     "autoload": {
         "classmap": [
@@ -30,16 +28,16 @@
         "psr-4": {
             "Sirgrimorum\\TransArticles\\": "src/"
         },
-        "files" : ["src/Helper.php"]
+        "files": ["src/Helper.php"]
     },
     "autoload-dev": {
         "psr-4": {
-            
+
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2.11-dev"
+            "dev-master": "1.2.13-dev"
         },
         "laravel": {
             "providers": [

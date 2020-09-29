@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSirgrimorumCmsArticles extends Migration {
 
@@ -21,7 +22,7 @@ class CreateSirgrimorumCmsArticles extends Migration {
             $table->string('lang',10);
             $table->longtext('content');
             $table->boolean('activated')->default(0);
-            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->intOrBigIntBasedOnRelated('user_id', Schema::connection(null), 'users.id')->unsigned()->nullable();
             $table->timestamps();
             $table->unique(array('nickname','lang','scope'));
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

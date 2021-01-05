@@ -47,7 +47,7 @@ class Article extends Model {
      */
     public function get($key, $justValue = true)
     {
-        if (!class_exists('\Sirgrimorum\CrudGenerator\CrudGenerator')) {
+        if (class_exists('\Sirgrimorum\CrudGenerator\CrudGenerator')) {
             $celda = \Sirgrimorum\CrudGenerator\CrudGenerator::field_array($this, $key);
             if ($justValue) {
                 return $celda['value'];

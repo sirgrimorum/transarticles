@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 
-class CreateSirgrimorumCmsArticles extends Migration {
+return new class extends Migration {
 
     /**
      * Run the migrations.
@@ -16,13 +15,13 @@ class CreateSirgrimorumCmsArticles extends Migration {
         Schema::create('articles', function($table)
         {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('nickname',50);
             $table->string('scope',50);
             $table->string('lang',10);
             $table->longtext('content');
             $table->boolean('activated')->default(0);
-            $table->intOrBigIntBasedOnRelated('user_id', Schema::connection(null), 'users.id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->timestamps();
             $table->unique(array('nickname','lang','scope'));
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -39,4 +38,4 @@ class CreateSirgrimorumCmsArticles extends Migration {
         Schema::drop('articles');
     }
 
-}
+};

@@ -14,7 +14,8 @@ class Article extends Model {
     ];
     public $error_messages = []; //The validation error messages
 
-    public function _construct() {
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
         $this->error_messages = [
         ];
     }
@@ -35,35 +36,7 @@ class Article extends Model {
     }
     
     public function user() {
-        return $this->belongsTo('App\User');
-    }
-
-    /**
-     * Get the flied value using the configuration array
-     * 
-     * @param string $key The field to return
-     * @param boolean $justValue Optional If return just the formated value (true) or an array with 3 elements, label, value and data (detailed data for the field)
-     * @return mixed
-     */
-    public function get($key, $justValue = true)
-    {
-        if (class_exists('\Sirgrimorum\CrudGenerator\CrudGenerator')) {
-            $celda = \Sirgrimorum\CrudGenerator\CrudGenerator::field_array($this, $key);
-            if ($justValue) {
-                return $celda['value'];
-            } else {
-                return $celda;
-            }
-        }
-        if ($justValue) {
-            return $this->{$key};
-        } else {
-            return [
-                'value' => $this->{$key},
-                "data" => $this->{$key},
-                "label" => $key
-            ];
-        }
+        return $this->belongsTo('App\Models\User');
     }
 
 }

@@ -20,7 +20,9 @@
         "laravel/framework": "^9.0|^10.0|^11.0"
     },
     "require-dev": {
-        "phpunit/phpunit" : "^10.0"
+        "phpunit/phpunit" : "^10.0",
+        "orchestra/testbench": "^8.0|^9.0",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "classmap": [
@@ -33,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            
+            "Sirgrimorum\\TransArticles\\Tests\\": "tests/"
         }
     },
     "extra": {

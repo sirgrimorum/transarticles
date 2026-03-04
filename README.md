@@ -1,151 +1,195 @@
-# SirGrimorum's TransArticles
+# TransArticles
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
-[![Total Downloads][ico-downloads]][link-downloads]
+![Latest Version on Packagist](https://img.shields.io/packagist/v/sirgrimorum/transarticles.svg?style=flat-square)
+![PHP Version](https://img.shields.io/packagist/php-v/sirgrimorum/transarticles.svg?style=flat-square)
+![Total Downloads](https://img.shields.io/packagist/dt/sirgrimorum/transarticles.svg?style=flat-square)
+![License](https://img.shields.io/packagist/l/sirgrimorum/transarticles.svg?style=flat-square)
 
+Database-backed multilingual content for Laravel. Store rich-text articles in the database instead of flat files, retrieve them by locale, expose them to JavaScript, and manage them via the CrudGenerator admin — all with a single helper call.
 
-Localization using a datablase table for Laravel 5.6. Include a function to add Translation form DB to javascript.
+## Features
 
-## Install
+- **Database-backed translations** — articles stored per locale in the `articles` table
+- **Automatic locale fallback** — returns any available language when the current locale is missing
+- **Dot-notation keys** — `scope.nickname` addressing (e.g. `help.contact_us`)
+- **JavaScript exposure** — publish a whole scope of articles to a JS global for frontend use
+- **Blade directives** — render or expose articles without leaving the template
+- **`trans_article()` helper** — global function usable anywhere in PHP
+- **Seeder generation** — dump the current `articles` table to a seed file with one command
+- **CrudGenerator integration** — articles can be managed via the CrudGenerator admin when both packages are installed
 
-Via Composer
+## Requirements
 
-``` bash
-$ composer require :sirgrimorum/transarticles
+- PHP >= 8.2
+- Laravel >= 9.0
+
+## Installation
+
+```bash
+composer require sirgrimorum/transarticles
 ```
 
-Create Table
+### Run migrations
 
-``` bash
-$ php artisan migrate
+```bash
+php artisan migrate
 ```
 
-OPTIONAL: Publish configuration file
+This creates the `articles` table with columns: `id`, `nickname`, `scope`, `lang`, `content`, `activated`, `user_id`.
 
-``` bash
-$php artisan vendor:publish --tag=config
+### Publish configuration (optional)
+
+```bash
+php artisan vendor:publish --provider="Sirgrimorum\TransArticles\TransArticlesServiceProvider" --tag=config
 ```
 
-## Usage
+Publishes `config/sirgrimorum/transarticles.php`.
 
-Bring a translated article
+## Configuration
 
-``` php
-$text = TransArticles::get("scope.nickname");
-```
-OR
-``` php
-$text = trans_article("scope.nickname");
-```
+`config/sirgrimorum/transarticles.php`
 
-## Articles to JavaScript
+```php
+return [
+    // Eloquent model used to store articles
+    'default_articles_model' => \Sirgrimorum\TransArticles\Models\Article::class,
 
-Load javascript object with all translations of a given scope
+    // Database column that stores the locale code
+    'default_lang_column' => 'lang',
 
-``` html
-{!! TransArticles::getjs('scope') !!}
-<script>
-    (function() {
-        alert(translations.scope.nickname);
-    })();
-</script>
-```
+    // Model scope used to find a single article
+    'default_findarticle_function_name' => 'findArticle',
 
-Load javascript object with translated article
+    // Model scope used to find a collection of articles
+    'default_findarticles_function_name' => 'findArticles',
 
-``` html
-{!! TransArticles::getjs('scope.nickname') !!}
-<script>
-    (function() {
-        alert(translations.scope.nickname);
-    })();
-</script>
+    // JavaScript global variable for exposed articles
+    'default_base_var' => 'translations',
+];
 ```
 
-## Blade directives
+## Creating Articles
 
+Insert records directly or use the CrudGenerator admin (if installed):
 
-Bring a translated article using the Blade directive
-
-``` html
-@transarticles("scope.nickname")
+```php
+\Sirgrimorum\TransArticles\Models\Article::create([
+    'scope'     => 'homepage',
+    'nickname'  => 'hero_title',
+    'lang'      => 'en',
+    'content'   => '<h1>Welcome to our site</h1>',
+    'activated' => true,
+]);
 ```
 
-Load javascript object with all translations of a given scope using the Blade directive
+## Retrieving Articles
 
-``` html
-@transarticles_tojs('scope')
-<script>
-    (function() {
-        alert(translations.scope.nickname);
-    })();
-</script>
+### Facade
+
+```php
+use Sirgrimorum\TransArticles\Facades\TransArticles;
+
+// Returns content for the current locale (or fallback)
+$html = TransArticles::get('homepage.hero_title');
+
+// Expose a scope as a <script> tag
+$script = TransArticles::getjs('homepage');
 ```
 
-Load javascript object with translated article using the Blade directive
+### Helper function
 
-``` html
-@transarticles_tojs('scope.nickname')
-<script>
-    (function() {
-        alert(translations.scope.nickname);
-    })();
-</script>
+```php
+echo trans_article('homepage.hero_title');
 ```
 
-When using blade directives, remember to clear de view:cache after each change in the articles table:
+### Blade directives
 
-``` bash
-$php artisan view:clear
-``` 
+```blade
+{{-- Render an article inline --}}
+@transarticles('homepage.hero_title')
 
-## Seeding
+{{-- Expose an entire scope to JavaScript --}}
+@transarticles_tojs('homepage')
 
-TransArticles installs orangehill/iseed to create seed files from the DataBase data. There are 2 new commands:
+{{-- Custom JS variable name --}}
+@transarticles_tojs('homepage', 'pageContent')
+```
 
-To create seed files from the Articles table:
-``` bash
-$php artisan transarticles:createseed
-``` 
+### JavaScript usage (after `@transarticles_tojs`)
 
-To create seed files from ALL the tables in de DataBase except the migrations table:
-``` bash
-$php artisan transarticles:createseed --all
-``` 
+```js
+// window.translations.homepage.hero_title => "<h1>Welcome...</h1>"
+document.getElementById('hero').innerHTML = translations.homepage.hero_title;
+```
 
-To create seed files from ALL the tables in de DataBase except the migrations table without suffix and forcing overwrite of prior seed files:
-``` bash
-$php artisan transarticles:createseed --all --force
-``` 
+## Locale Fallback Behaviour
 
-## Security
+1. Look for an article with `lang = App::getLocale()` and `activated = true`
+2. If not found, return any activated article for that `scope.nickname`
+3. If still not found, return the nickname itself (useful for spotting missing articles)
 
-If you discover any security related issues, please email andres.espinosa@grimorum.com instead of using the issue tracker.
+A warning label is shown when content is returned in a fallback language.
 
-## Credits
+## Artisan Commands
 
-- SirGrimorum [link-author]
-- Grimorum Ltda. [link-contributors]
+### `transarticles:createseed`
+
+Generates a database seed file from the current `articles` table:
+
+```bash
+# Seed only the articles table
+php artisan transarticles:createseed
+
+# Seed all tables (excluding migrations)
+php artisan transarticles:createseed --all
+
+# Force overwrite
+php artisan transarticles:createseed --force
+```
+
+The generated seed file is placed in `database/seeds/` (or `database/seeders/` for Laravel 8+).
+
+## API Reference
+
+### `TransArticles::get()`
+
+```php
+TransArticles::get(string $nickname): string
+```
+
+Returns the HTML content of the article identified by `scope.nickname` for the current locale.
+
+### `TransArticles::getjs()`
+
+```php
+TransArticles::getjs(
+    string $scope,      // Scope to expose (or 'scope.nickname' for a single article)
+    string $basevar = '' // JS global variable (defaults to config 'default_base_var')
+): string
+```
+
+Returns a `<script>` tag that assigns all articles in the scope to `window.{basevar}.{scope}`.
+
+### `trans_article()`
+
+```php
+trans_article(string $nickname): string
+```
+
+Global helper — equivalent to `TransArticles::get($nickname)`.
+
+### Blade directive — `@transarticles`
+
+```blade
+@transarticles(string $nickname)
+```
+
+### Blade directive — `@transarticles_tojs`
+
+```blade
+@transarticles_tojs(string $scope, string $basevar = '')
+```
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-[ico-version]: https://img.shields.io/packagist/v/sirgrimorum/transarticles.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/scrutinizer/build/g/sirgrimorum/transarticles.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/sirgrimorum/transarticles.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/sirgrimorum/transarticles.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/sirgrimorum/transarticles.svg?style=flat-square
-
-[link-packagist]: https://packagist.org/packages/sirgrimorum/transarticles
-[link-travis]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles/inspections
-[link-scrutinizer]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/sirgrimorum/transarticles
-[link-downloads]: https://github.com/sirgrimorum/transarticles
-[link-author]: https://github.com/sirgrimorum
-[link-contributors]: http://grimorum.com
+The MIT License (MIT). See [LICENSE.md](LICENSE.md).
